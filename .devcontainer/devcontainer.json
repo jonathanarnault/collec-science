@@ -1,0 +1,40 @@
+{
+  "name": "PHP",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "composer install",
+    "remoteEnv": {
+    "SSH_AUTH_SOCK": "",
+    "GPG_AGENT_INFO": "",
+    "BROWSER": "",
+    "VSCODE_IPC_HOOK_CLI": null,
+    "VSCODE_GIT_IPC_HANDLE": null,
+    "GIT_ASKPASS": null,
+    "VSCODE_GIT_ASKPASS_MAIN": null,
+    "VSCODE_GIT_ASKPASS_NODE": null,
+    "VSCODE_GIT_ASKPASS_EXTRA_ARGS": null,
+    "REMOTE_CONTAINERS_IPC": null,
+    "REMOTE_CONTAINERS_SOCKETS": null,
+    "REMOTE_CONTAINERS_DISPLAY_SOCK": null,
+    "WAYLAND_DISPLAY": null
+  },
+    "features": {
+    "ghcr.io/devcontainers/features/common-utils": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/desktop-lite:1": {},
+    "./claude-code": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug"
+      ]
+    }
+  }
+}

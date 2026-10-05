@@ -17,6 +17,24 @@ sudo -s
 ./deploy_new_instance.sh
 ```
 
+## Development with Docker
+
+```
+make up
+```
+
+Run `make help` to list the other commands (`down`, `logs`, `shell`, `psql`, `migrate`, `db-reset`...).
+
+- application: [http://localhost:8080](http://localhost:8080), login `admin` / `password`
+- mails sent by the application: [http://localhost:1080](http://localhost:1080) (MailDev)
+- PostgreSQL: `localhost:5432`, database `collec`, login `collec` / `collecPassword`
+
+On the first start, the `.env` file is created from `docker/app/env` and the encryption keys are generated. The database is created from `install/pgsql/collec_create.sql`; to recreate it, run `make db-reset`. To apply the `install/pgsql/col_alter_*.sql` scripts to an existing database, run `make migrate`.
+
+If your user id is not 1000, build with `APP_UID=$(id -u) APP_GID=$(id -g) docker compose build`.
+
+To send the daily collection mails: `docker compose exec -u www-data app ./collectionsGenerateMail.sh`
+
 ## Upgrade
 
 Before each upgrade, verify if you have a recent backup of your database!
