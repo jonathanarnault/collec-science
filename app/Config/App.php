@@ -197,7 +197,7 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public string $dbversion = "26.2";
+    public string $dbversion = "26.3";
     /**
      * Location of the database schema
      *
@@ -391,5 +391,25 @@ class App extends BaseConfig
         "description" => "description",
     ];
     */
+    /**
+     * Publication of the samples into the IGSN registry (optional).
+     * Disabled by default: when false, the IGSN routes are not declared and nothing is displayed
+     *
+     * @var boolean
+     */
+    public bool $IGSN_enabled = false;
+    /**
+     * Address of the IGSN registry, without the path of the API (/api/service)
+     *
+     * @var string
+     */
+    public string $IGSN_url = "https://igsn.cnrs.fr";
+    /**
+     * Secret used to sign the calls of the registry webhook (at least 16 characters).
+     * If empty, no webhook is requested and the status of the publications is only updated by a manual refresh
+     *
+     * @var string
+     */
+    public string $IGSN_webhookSecret = "";
     public string $permittedURIChars = 'a-z 0-9~%.:_\-';
 }

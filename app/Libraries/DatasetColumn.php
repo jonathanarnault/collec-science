@@ -2,6 +2,7 @@
 
 namespace App\Libraries;
 
+use App\Models\CollectionIgsn;
 use App\Models\DatasetColumn as ModelsDatasetColumn;
 use App\Models\DatasetTemplate;
 use App\Models\Translator;
@@ -48,6 +49,12 @@ class DatasetColumn extends PpciLibrary
         $fields = json_decode($dt["fields"], true);
         asort($fields);
         $this->vue->set($fields, "fields");
+        /**
+         * The export names of an igsn template are the keys of the IGSN record
+         */
+        if ($this->appConfig->IGSN_enabled && $dt["dataset_type_id"] == CollectionIgsn::DATASET_TYPE_ID) {
+            $this->vue->set(array_keys(IgsnRecord::KEYS), "igsnKeys");
+        }
         /**
          * Get the translators
          */

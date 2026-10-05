@@ -91,7 +91,15 @@
                 {t}Nom dans l'export :{/t}
             </label>
             <div class="col-8">
-                <input id="export_name" type="text" class="form-control" name="export_name" value="{$data.export_name}" required>
+                <input id="export_name" type="text" class="form-control" name="export_name" value="{$data.export_name}" required {if !empty($igsnKeys)}list="igsnKeys"{/if}>
+                {* Keys of the IGSN record, for a template of type igsn *}
+                {if !empty($igsnKeys)}
+                <datalist id="igsnKeys">
+                    {foreach $igsnKeys as $igsnKey}
+                    <option value="{$igsnKey}">
+                    {/foreach}
+                </datalist>
+                {/if}
             </div>
         </div>
         <div class="row">

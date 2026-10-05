@@ -14,6 +14,12 @@ class Samplehisto extends PpciModel
 
     public array $oldValues = [];
     public int $uid = 0;
+    /**
+     * Login recorded in the history, instead of the login of the session (calls of external services)
+     *
+     * @var string|null
+     */
+    public ?string $login = null;
     private array $cols = [
         "identifier",
         "identifiers",
@@ -187,7 +193,7 @@ class Samplehisto extends PpciModel
                 }
                 if (!empty($data["sample_id"])) {
                     $row = $this->getDefaultValues($data["sample_id"]);
-                    $row["samplehisto_login"] = $_SESSION["login"];
+                    $row["samplehisto_login"] = $this->login ?? $_SESSION["login"];
                     $row["oldvalues"] = json_encode($new);
                     parent::write($row);
                 }

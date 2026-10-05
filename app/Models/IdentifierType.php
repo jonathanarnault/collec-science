@@ -50,6 +50,29 @@ class IdentifierType extends PpciModel
             order by identifier_type_code";
         return $this->getListeParam($sql);
     }
+    /**
+     * Get the identifier type of a code, whatever its case, and create it if it does not exist.
+     * Two concurrent creations insert one row only (unique index on the code)
+     *
+     * @param string $code
+     * @return integer
+     */
+    function getIdFromCodeOrCreate(string $code): int
+    {
+        $sql = "select identifier_type_id from identifier_type
+                where upper(identifier_type_code) = upper(:code:)
+                order by identifier_type_id limit 1";
+        $row = $this->lireParam($sql, ["code" => $code]);
+        if (empty($row["identifier_type_id"])) {
+            $this->executeSQL(
+                "insert into identifier_type (identifier_type_name, identifier_type_code) values (:code:, :code:) on conflict do nothing",
+                ["code" => $code],
+                true
+            );
+            $row = $this->lireParam($sql, ["code" => $code]);
+        }
+        return (int) $row["identifier_type_id"];
+    }
     function getIdFromCode(string $code): int
     {
         $sql = "select identifier_type_id from identifier_type

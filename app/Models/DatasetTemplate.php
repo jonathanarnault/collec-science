@@ -113,6 +113,7 @@ class DatasetTemplate extends PpciModel
         switch ($ddataset["dataset_type_id"]) {
             case 1:
             case 5:
+            case 6:
                 /**
                  * Samples
                  */
@@ -185,95 +186,108 @@ class DatasetTemplate extends PpciModel
              * Treatment of each row
              */
             foreach ($dbdata as $dbrow) {
-                $row = array();
-                $metadata_schema = json_decode($dbrow["metadata_schema"], true);
-                /**
-                 * Treatment of each column
-                 */
-                foreach ($columns as $col) {
-                    $value = "";
-                    if (!empty($col["subfield_name"])) {
-                        if ($col["column_name"] == "metadata") {
-                            if (!is_array($dbrow["metadata"])) {
-                                $md = json_decode($dbrow["metadata"], true);
-                            } else {
-                                $md = $dbrow["metadata"];
-                            }
-                            if (is_array($md[$col["subfield_name"]])) {
-                                $isFirst = true;
-                                foreach ($md[$col["subfield_name"]] as $mdval) {
-                                    $isFirst ? $isFirst = false : $value .= ",";
-                                    $value .= $mdval;
-                                }
-                            } else {
-                                $value = $md[$col["subfield_name"]];
-                            }
-                        } elseif ($col["column_name"] == "metadata_unit") {
-                            foreach ($metadata_schema as $ms) {
-                                if ($ms["name"] == $col["subfield_name"]) {
-                                    $value = $ms["measureUnit"];
-                                    break;
-                                }
-                            }
-                        } elseif ($col["column_name"] == "identifiers" || $col["column_name"] == "parent_identifiers") {
-                            /**
-                             * The structure is under the form:
-                             * igsn:123,other:456
-                             * subfield_name contains igsn or other
-                             */
-                            $identArr = explode(",", $dbrow[$col["column_name"]]);
-                            foreach ($identArr as $identifier) {
-                                $idArr = explode(":", $identifier);
-                                if ($idArr[0] == $col["subfield_name"]) {
-                                    $value = $idArr[1];
-                                }
-                            }
-                        }
-                    } else {
-                        $value = $dbrow[$col["column_name"]];
-                    }
-                    if ($col["translator_id"] > 0 && !empty($col["translations"][$value])) {
-                        $value = $col["translations"][$value];
-                    }
-                    if (!empty($col["default_value"]) && empty($value)) {
-                        $value = $col["default_value"];
-                    }
-                    /**
-                     * Treatment of keywords
-                     */
-                    if ($col["column_name"] == "collection_keywords" && !empty($value)) {
-                        $words = explode(",", $value);
-                        $value = array();
-                        foreach ($words as $word) {
-                            $value[] = array("keyword" => $word);
-                        }
-                    }
-                    if (!empty($col["date_format"]) && !empty($value)) {
-                        $value = date_format(date_create($value), $col["date_format"]);
-                    }
-                    if ($col["column_name"] == "web_address" && !empty($webmodule)) {
-                        /**
-                         * Create a link to download the content of the record
-                         */
-                        $value = "https://" . $_SERVER["HTTP_HOST"] . "/index.php?module=" . $webmodule . "&uuid=" . $dbrow["uuid"];
-                        if (!empty($template_name)) {
-                            $value .= "&template_name=$template_name";
-                        }
-                    }
-                    if ($col["mandatory"] == 't' && empty($value)) {
-                        if ($col["column_name"] == "metadata" || $col["column_name"] == "metadata_unit") {
-                            $subfield = $col["subfield_name"];
-                        } else {
-                            $subfield = "";
-                        }
-                        throw new PpciException(sprintf(_("Le champ %1s %3s est obligatoire, mais est vide pour l'échantillon %2s"), $col["column_name"], $dbrow["uid"], $subfield));
-                    }
-                    $row[$col["export_name"]] = $value;
-                }
-                $data[] = $row;
+                $data[] = $this->formatRow($dbrow, $columns, $webmodule, $template_name);
             }
         }
         return $data;
+    }
+    /**
+     * Format a row with the columns of the template
+     *
+     * @param array $dbrow: data extracted from the database
+     * @param array $columns: columns of the template, from DatasetColumn::getListColumns()
+     * @param string $webmodule: module called by the web_address column
+     * @param string $template_name: template given to the web_address column
+     * @return array
+     */
+    function formatRow(array $dbrow, array $columns, string $webmodule = "", string $template_name = ""): array
+    {
+        $row = array();
+        $metadata_schema = json_decode($dbrow["metadata_schema"], true);
+        /**
+         * Treatment of each column
+         */
+        foreach ($columns as $col) {
+            $value = "";
+            if (!empty($col["subfield_name"])) {
+                if ($col["column_name"] == "metadata") {
+                    if (!is_array($dbrow["metadata"])) {
+                        $md = json_decode($dbrow["metadata"], true);
+                    } else {
+                        $md = $dbrow["metadata"];
+                    }
+                    if (is_array($md[$col["subfield_name"]])) {
+                        $isFirst = true;
+                        foreach ($md[$col["subfield_name"]] as $mdval) {
+                            $isFirst ? $isFirst = false : $value .= ",";
+                            $value .= $mdval;
+                        }
+                    } else {
+                        $value = $md[$col["subfield_name"]];
+                    }
+                } elseif ($col["column_name"] == "metadata_unit") {
+                    foreach ($metadata_schema as $ms) {
+                        if ($ms["name"] == $col["subfield_name"]) {
+                            $value = $ms["measureUnit"];
+                            break;
+                        }
+                    }
+                } elseif ($col["column_name"] == "identifiers" || $col["column_name"] == "parent_identifiers") {
+                    /**
+                     * The structure is under the form:
+                     * igsn:123,other:456
+                     * subfield_name contains igsn or other
+                     */
+                    $identArr = explode(",", $dbrow[$col["column_name"]]);
+                    foreach ($identArr as $identifier) {
+                        $idArr = explode(":", $identifier);
+                        if ($idArr[0] == $col["subfield_name"]) {
+                            $value = $idArr[1];
+                        }
+                    }
+                }
+            } else {
+                $value = $dbrow[$col["column_name"]];
+            }
+            if ($col["translator_id"] > 0 && !empty($col["translations"][$value])) {
+                $value = $col["translations"][$value];
+            }
+            if (!empty($col["default_value"]) && empty($value)) {
+                $value = $col["default_value"];
+            }
+            /**
+             * Treatment of keywords
+             */
+            if ($col["column_name"] == "collection_keywords" && !empty($value)) {
+                $words = explode(",", $value);
+                $value = array();
+                foreach ($words as $word) {
+                    $value[] = array("keyword" => $word);
+                }
+            }
+            if (!empty($col["date_format"]) && !empty($value)) {
+                $value = date_format(date_create($value), $col["date_format"]);
+            }
+            if ($col["column_name"] == "web_address" && !empty($webmodule)) {
+                /**
+                 * Create a link to download the content of the record
+                 */
+                $value = "https://" . $_SERVER["HTTP_HOST"] . "/index.php?module=" . $webmodule . "&uuid=" . $dbrow["uuid"];
+                if (!empty($template_name)) {
+                    $value .= "&template_name=$template_name";
+                }
+            }
+            if ($col["mandatory"] == 't' && empty($value)) {
+                if ($col["column_name"] == "metadata" || $col["column_name"] == "metadata_unit") {
+                    $subfield = $col["subfield_name"];
+                } else {
+                    $subfield = "";
+                }
+                throw new PpciException(sprintf(_("Le champ %1s %3s est obligatoire, mais est vide pour l'échantillon %2s"), $col["column_name"], $dbrow["uid"], $subfield));
+            }
+            $row[$col["export_name"]] = $value;
+        }
+        return $row;
     }
     /**
      * Get the datasetTemplate from its name

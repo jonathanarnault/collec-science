@@ -2,6 +2,7 @@
 
 namespace App\Libraries;
 
+use App\Models\CollectionIgsn;
 use App\Models\DatasetColumn;
 use App\Models\DatasetTemplate as ModelsDatasetTemplate;
 use App\Models\DatasetType;
@@ -61,9 +62,17 @@ class DatasetTemplate extends PpciLibrary
          * If is a new record, generate a new record with default value :
          * $_REQUEST["idParent"] contains the identifiant of the parent record 
          */
-        $this->dataRead($this->id, "export/datasetTemplateChange.tpl");
+        $data = $this->dataRead($this->id, "export/datasetTemplateChange.tpl");
         $dt = new DatasetType();
-        $this->vue->set($dt->getListe(1), "datasetTypes");
+        $datasetTypes = $dt->getListe(1);
+        /**
+         * The igsn type is only proposed if the publication into IGSN is enabled,
+         * or kept for a template of that type: otherwise its type would be changed when saved
+         */
+        if (!$this->appConfig->IGSN_enabled && $data["dataset_type_id"] != CollectionIgsn::DATASET_TYPE_ID) {
+            $datasetTypes = array_values(array_filter($datasetTypes, fn($type) => $type["dataset_type_id"] != CollectionIgsn::DATASET_TYPE_ID));
+        }
+        $this->vue->set($datasetTypes, "datasetTypes");
         $ef = new ExportFormat();
         $this->vue->set($ef->getListe(1), "exportFormats");
         return $this->vue->send();
@@ -88,10 +97,19 @@ class DatasetTemplate extends PpciLibrary
         /*
 		 * delete record
 		 */
+        /**
+         * The columns are deleted before the template: if the template is still used
+         * by a collection published into IGSN, its deletion fails and the columns must be kept
+         */
+        $db = $this->dataclass->db;
+        $db->transBegin();
         try {
-            $this->dataDelete($this->id);
+            $this->dataDelete($this->id, true);
+            $db->transCommit();
+            $this->message->set(_("Suppression effectuée"));
             return true;
         } catch (PpciException $e) {
+            $db->transRollback();
             return false;
         }
     }

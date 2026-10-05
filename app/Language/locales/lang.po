@@ -11711,3 +11711,272 @@ msgstr "Value"
 
 #~ msgid "A propos de Metabo"
 #~ msgstr "About Otolith"
+
+#: ../../../app/Libraries/IgsnRecord.php
+#, php-format
+msgid "La colonne %s du modèle IGSN ne correspond à aucune clé IGSN connue"
+msgstr "The column %s of the IGSN template does not match any known IGSN key"
+
+#: ../../../app/Libraries/IgsnRecord.php
+#, php-format
+msgid "La date %s n'est pas valide"
+msgstr "The date %s is not valid"
+
+#: ../../../app/Libraries/IgsnApiException.php
+#, php-format
+msgid "Le registre IGSN a refusé la requête (statut %1s) : %2s"
+msgstr "The IGSN registry refused the request (status %1s): %2s"
+
+#: ../../../app/Libraries/IgsnWebhook.php
+msgid "L'appel du registre IGSN n'est pas lisible"
+msgstr "The call of the IGSN registry cannot be read"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %s : vous n'avez pas les droits sur sa collection"
+msgstr "Sample %s: you have no rights on its collection"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "La publication dans IGSN n'est pas configurée pour la collection %s"
+msgstr "The publication into IGSN is not configured for the collection %s"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %s : une publication est déjà en cours, actualisez son statut"
+msgstr "Sample %s: a publication is already in progress, refresh its status"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %1s : son parent %2s doit d'abord être publié dans IGSN"
+msgstr "Sample %1s: its parent %2s must be published into IGSN first"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %s : il porte déjà un IGSN qui n'a pas été attribué par ce registre"
+msgstr "Sample %s: it already carries an IGSN which was not minted by this registry"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "%s échantillon(s) envoyé(s) au registre IGSN"
+msgstr "%s sample(s) sent to the IGSN registry"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Le registre IGSN n'a pas pu être contacté, réessayez plus tard"
+msgstr "The IGSN registry could not be reached, try again later"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Cet échantillon n'a pas été envoyé au registre IGSN"
+msgstr "This sample has not been sent to the IGSN registry"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Vous n'avez pas les droits sur la collection de l'échantillon"
+msgstr "You have no rights on the collection of the sample"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Le statut de la publication IGSN a été mis à jour"
+msgstr "The status of the IGSN publication has been updated"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %1s : le registre IGSN refuse le champ %2s (%3s)"
+msgstr "Sample %1s: the IGSN registry refuses the field %2s (%3s)"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Le registre IGSN refuse l'adresse de retour (webhook) de l'application (%1s : %2s) : l'application doit être accessible publiquement en https, sinon videz app.IGSN_webhookSecret"
+msgstr "The IGSN registry refuses the webhook address of the application (%1s: %2s): the application must be publicly reachable in https, otherwise empty app.IGSN_webhookSecret"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Le registre IGSN refuse le lot : %s"
+msgstr "The IGSN registry refuses the batch: %s"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "en cours de publication"
+msgstr "being published"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %1s : doublon suspecté de %2s"
+msgstr "Sample %1s: suspected duplicate of %2s"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "S'il s'agit bien d'échantillons différents, relancez la publication en cochant « publier même si des doublons sont suspectés »"
+msgstr "If they really are different samples, publish again with the option \"publish even if duplicates are suspected\""
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Un échantillon a été modifié dans le registre IGSN pendant l'envoi : relancez la publication"
+msgstr "A sample was changed in the IGSN registry during the sending: publish again"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "La clé d'API IGSN de la collection est refusée par le registre"
+msgstr "The IGSN API key of the collection is refused by the registry"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Le lot est trop volumineux pour le registre IGSN (plus de 20 Mo)"
+msgstr "The batch is too large for the IGSN registry (more than 20 MiB)"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Trop d'envois vers le registre IGSN : réessayez dans une minute pour les échantillons non envoyés"
+msgstr "Too many sendings to the IGSN registry: try again in a minute for the samples not sent"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "DataCite ne répond pas : rien n'a été enregistré par le registre IGSN, réessayez plus tard"
+msgstr "DataCite does not answer: nothing was recorded by the IGSN registry, try again later"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Le registre IGSN a répondu par une erreur (statut %1s) : %2s"
+msgstr "The IGSN registry answered with an error (status %1s): %2s"
+
+#: ../../../app/Libraries/IgsnRecord.php
+#, php-format
+msgid "champs IGSN obligatoires non renseignés : %s"
+msgstr "required IGSN fields not filled: %s"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Échantillon %1s non envoyé : %2s"
+msgstr "Sample %1s not sent: %2s"
+
+#: ../../../app/Filters/IgsnConfigCheckFilter.php ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "IGSN est activé mais app.IGSN_webhookSecret n'est pas défini : les publications ne seront suivies que par actualisation manuelle"
+msgstr "IGSN is enabled but app.IGSN_webhookSecret is not set: the publications will only be followed by a manual refresh"
+
+#: ../../../app/Models/CollectionIgsn.php
+msgid "La clé d'API IGSN doit être renseignée"
+msgstr "The IGSN API key must be filled"
+
+#: ../../../app/Libraries/Collection.php
+msgid "La publication dans IGSN est désactivée pour la collection"
+msgstr "The publication into IGSN is disabled for the collection"
+
+#: ../../../app/Libraries/Collection.php
+msgid "Le modèle de jeu de données générant les fiches IGSN doit être choisi"
+msgstr "The dataset template generating the IGSN records must be chosen"
+
+#: ../../../app/Libraries/Collection.php
+msgid "Les paramètres de publication dans IGSN ont été enregistrés"
+msgstr "The settings of the publication into IGSN have been recorded"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "Envoyer l'échantillon au registre IGSN"
+msgstr "Send the sample to the IGSN registry"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "Mettre à jour dans IGSN"
+msgstr "Update in IGSN"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "Publier dans IGSN"
+msgstr "Publish into IGSN"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "Publier même si le registre soupçonne un doublon (même nom, même matériau, même collecteur)"
+msgstr "Publish even if the registry suspects a duplicate (same name, same material, same collector)"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "même si doublon suspecté"
+msgstr "even if a duplicate is suspected"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "IGSN :"
+msgstr "IGSN:"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "publication en cours"
+msgstr "publication in progress"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "publié"
+msgstr "published"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "échec de la publication"
+msgstr "publication failed"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "retiré"
+msgstr "withdrawn"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "Relire le statut de la publication dans le registre IGSN"
+msgstr "Read again the status of the publication in the IGSN registry"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "Actualiser le statut IGSN"
+msgstr "Refresh the IGSN status"
+
+#: ../../../app/Views/templates/gestion/sampleListDetail.tpl
+msgid "Publier dans le registre IGSN"
+msgstr "Publish into the IGSN registry"
+
+#: ../../../app/Views/templates/gestion/sampleListDetail.tpl
+msgid "Publier même si le registre soupçonne des doublons (même nom, même matériau, même collecteur)"
+msgstr "Publish even if the registry suspects duplicates (same name, same material, same collector)"
+
+#: ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "Publication dans le registre IGSN"
+msgstr "Publication into the IGSN registry"
+
+#: ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "Clé d'API du compte de service IGSN :"
+msgstr "API key of the IGSN service account:"
+
+#: ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "Une clé est enregistrée : laissez vide pour la conserver"
+msgstr "A key is recorded: leave empty to keep it"
+
+#: ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "Modèle de jeu de données générant les fiches IGSN :"
+msgstr "Dataset template generating the IGSN records:"
+
+#: ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "Désactiver la publication pour cette collection :"
+msgstr "Disable the publication for this collection:"
+
+#: ../../../app/Views/templates/param/collectionChangeTab.tpl
+msgid "Enregistrer les paramètres IGSN"
+msgstr "Record the IGSN settings"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+#, php-format
+msgid "Le lot %s a été accepté par le registre IGSN mais n'a pas pu être enregistré : signalez-le à l'administrateur, ses échantillons ne pourront pas être renvoyés avant 15 minutes"
+msgstr "The batch %s was accepted by the IGSN registry but could not be recorded: report it to the administrator, its samples cannot be sent again before 15 minutes"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "La collection qui a envoyé le lot n'a plus de clé d'API IGSN : le lot ne peut plus être suivi"
+msgstr "The collection which sent the batch has no IGSN API key anymore: the batch can no longer be followed"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Le lot ne peut plus être lu dans le registre IGSN : l'échantillon peut être renvoyé"
+msgstr "The batch can no longer be read in the IGSN registry: the sample can be sent again"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Le lot est inconnu du registre IGSN pour la clé d'API de la collection : le lot ne peut plus être suivi"
+msgstr "The batch is unknown to the IGSN registry for the API key of the collection: the batch can no longer be followed"
+
+#: ../../../app/Libraries/Collection.php
+msgid "La collection n'existe pas"
+msgstr "The collection does not exist"
+
+#: ../../../app/Libraries/Collection.php
+msgid "Les paramètres de publication dans IGSN n'ont pas pu être enregistrés"
+msgstr "The settings of the publication into IGSN could not be recorded"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "envoi en cours"
+msgstr "sending in progress"
+
+#: ../../../app/Views/templates/gestion/sampleDisplay.tpl
+msgid "suivi interrompu"
+msgstr "follow-up interrupted"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "La clé d'API IGSN de la collection ne peut pas être lue : saisissez-la de nouveau"
+msgstr "The IGSN API key of the collection cannot be read: enter it again"
+
+#: ../../../app/Libraries/IgsnPublisher.php
+msgid "Le statut de la publication IGSN n'a pas pu être enregistré"
+msgstr "The status of the IGSN publication could not be recorded"

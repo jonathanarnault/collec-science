@@ -372,4 +372,58 @@
         </div>
         {$csrf}
     </form>
+    {* Publication into the IGSN registry: separate form, the API key is never sent with the collection *}
+    {if $IGSN_enabled == 1 && $data.collection_id > 0}
+    <fieldset class="mt-3">
+        <legend>{t}Publication dans le registre IGSN{/t}</legend>
+        {if $igsnWebhookMissing == 1}
+        <div class="alert alert-warning">
+            {t}IGSN est activé mais app.IGSN_webhookSecret n'est pas défini : les publications ne seront suivies que par actualisation manuelle{/t}
+        </div>
+        {/if}
+        <form id="collectionIgsnForm" method="post" action="collectionIgsnWrite">
+            <input type="hidden" name="collection_id" value="{$data.collection_id}">
+            <div class="row">
+                <label for="igsn_api_key" class="form-label col-4">
+                    {t}Clé d'API du compte de service IGSN :{/t}
+                </label>
+                <div class="col-8">
+                    <input id="igsn_api_key" type="password" class="form-control" name="igsn_api_key" value="" autocomplete="new-password"
+                        placeholder="{if $igsnSettings.collection_id > 0}{t}Une clé est enregistrée : laissez vide pour la conserver{/t}{/if}">
+                </div>
+            </div>
+            <div class="row">
+                <label for="igsn_dataset_template_id" class="form-label col-4">
+                    {t}Modèle de jeu de données générant les fiches IGSN :{/t}
+                </label>
+                <div class="col-8">
+                    <select id="igsn_dataset_template_id" name="igsn_dataset_template_id" class="form-select">
+                        <option value="">{t}Choisissez...{/t}</option>
+                        {foreach $igsnTemplates as $template}
+                        <option value="{$template.dataset_template_id}" {if $template.dataset_template_id == $igsnSettings.dataset_template_id}selected{/if}>
+                            {$template.dataset_template_name}
+                        </option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            {if $igsnSettings.collection_id > 0}
+            <div class="row">
+                <label for="igsn_disable" class="form-label col-4">
+                    {t}Désactiver la publication pour cette collection :{/t}
+                </label>
+                <div class="col-8">
+                    <input type="checkbox" class="form-check-input" id="igsn_disable" name="igsn_disable" value="1">
+                </div>
+            </div>
+            {/if}
+            <div class="row d-flex justify-content-center">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">{t}Enregistrer les paramètres IGSN{/t}</button>
+                </div>
+            </div>
+            {$csrf}
+        </form>
+    </fieldset>
+    {/if}
 </div>

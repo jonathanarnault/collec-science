@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use \Ppci\Controllers\PpciController;
+use App\Libraries\IgsnPublisher;
 use App\Libraries\Sample as LibrariesSample;
 use App\Models\SearchSample;
 
@@ -143,6 +144,33 @@ class Sample extends PpciController
     function setOperation() {
         $this->lib->setOperation();
         return $this->returnToOrigin($_SESSION["moduleParent"]);
+    }
+    /**
+     * Publish the selected samples into the IGSN registry
+     */
+    function igsnPublishMulti()
+    {
+        $publisher = new IgsnPublisher;
+        $publisher->publish($_POST["uids"] ?? [], !empty($_POST["confirmDuplicates"]));
+        return $this->returnToOrigin($_SESSION["moduleParent"]);
+    }
+    /**
+     * Publish the displayed sample into the IGSN registry
+     */
+    function igsnPublish()
+    {
+        $publisher = new IgsnPublisher;
+        $publisher->publish([$_POST["uid"] ?? 0], !empty($_POST["confirmDuplicates"]));
+        return $this->returnToOrigin("sample");
+    }
+    /**
+     * Read again from the IGSN registry the status of the publication of the displayed sample
+     */
+    function igsnRefresh()
+    {
+        $publisher = new IgsnPublisher;
+        $publisher->refresh((int) ($_POST["uid"] ?? 0));
+        return $this->returnToOrigin("sample");
     }
     function getChildren()
     {

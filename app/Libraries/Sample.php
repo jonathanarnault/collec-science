@@ -8,6 +8,7 @@ use App\Models\Borrower;
 use App\Models\Borrowing;
 use App\Models\Campaign;
 use App\Models\Collection;
+use App\Models\CollectionIgsn;
 use App\Models\Container;
 use App\Models\ContainerFamily;
 use App\Models\Country;
@@ -15,6 +16,7 @@ use App\Models\Document;
 use App\Models\Event;
 use App\Models\EventType;
 use App\Models\ExportModel;
+use App\Models\IgsnPublication;
 use App\Models\Import;
 use App\Models\Label;
 use App\Models\Metadata;
@@ -276,6 +278,7 @@ class Sample extends PpciLibrary
                 $this->vue->set($histoEvents, "histoEvents");
             }
             $this->vue->set($_SESSION["dbparams"]["APPLI_code"], "APPLI_code");
+            $this->setIgsnToView($data);
             /**
              *
              * Recuperation des documents
@@ -324,6 +327,24 @@ class Sample extends PpciLibrary
         $this->vue->set("sample", "moduleParent");
         $this->vue->set("gestion/sampleDisplay.tpl", "corps");
         return $this->vue->send();
+    }
+    /**
+     * Assign to the view the publication into IGSN of the displayed sample, if it is enabled
+     *
+     * @param array $data: displayed sample
+     * @return void
+     */
+    private function setIgsnToView(array $data): void
+    {
+        if ($this->appConfig->IGSN_enabled) {
+            /**
+             * Read from the database, the settings may have been changed by another user during the session
+             */
+            $collectionIgsn = new CollectionIgsn;
+            $this->vue->set(empty($collectionIgsn->getSettings($data["collection_id"])) ? 0 : 1, "igsnCollectionEnabled");
+            $publication = new IgsnPublication;
+            $this->vue->set($publication->getFromUid($data["uid"]), "igsnPublication");
+        }
     }
     function change($withTab = 0)
     {

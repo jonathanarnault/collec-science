@@ -275,6 +275,24 @@
 				</a>
 			</span>
 		</div>
+		{* Publication into the IGSN registry, only if enabled for the instance and the collection *}
+		{if $IGSN_enabled == 1 && $igsnCollectionEnabled == 1 && $modifiable == 1}
+		<div class="col-auto">
+			<form method="POST" action="sampleIgsnPublish" class="form-inline">
+				<input type="hidden" name="uid" value="{$data.uid}">
+				<input type="hidden" name="moduleFrom" value="sampleDisplay">
+				<button type="submit" class="btn btn-link p-0" title="{t}Envoyer l'échantillon au registre IGSN{/t}">
+					<img src="display/images/up.png" height="25">
+					{if $igsnPublication.igsn != ""}{t}Mettre à jour dans IGSN{/t}{else}{t}Publier dans IGSN{/t}{/if}
+				</button>
+				<label class="form-check-label" title="{t}Publier même si le registre soupçonne un doublon (même nom, même matériau, même collecteur){/t}">
+					<input type="checkbox" class="form-check-input" name="confirmDuplicates" value="1">
+					{t}même si doublon suspecté{/t}
+				</label>
+				{$csrf}
+			</form>
+		</div>
+		{/if}
 		{/if}
 		{/if}
 		<div class="col-auto">
@@ -319,6 +337,44 @@
 	<h2>
 		{t}Détail de l'échantillon{/t} <i>{$data.uid} {$data.identifier}</i>
 	</h2>
+	{if $IGSN_enabled == 1 && !empty($igsnPublication)}
+	<div class="row">
+		<div class="col-md-8 alert {if $igsnPublication.igsn_status == "publish_failed"}alert-danger{else}alert-info{/if}">
+			<div class="row align-items-center">
+				<div class="col-auto">
+					<b>{t}IGSN :{/t}</b>
+					{if $igsnPublication.igsn != ""}
+					<a href="{$IGSN_url}/samples/{$igsnPublication.igsn}" target="_blank">{$igsnPublication.igsn}</a>
+					{/if}
+					{if $igsnPublication.igsn_status == "submitting"}{t}envoi en cours{/t}
+					{elseif $igsnPublication.igsn_status == "publishing"}{t}publication en cours{/t}
+					{elseif $igsnPublication.igsn_status == "published"}{t}publié{/t}
+					{elseif $igsnPublication.igsn_status == "publish_failed"}{t}échec de la publication{/t}
+					{elseif $igsnPublication.igsn_status == "withdrawn"}{t}retiré{/t}
+					{elseif $igsnPublication.igsn_status == "untracked"}{t}suivi interrompu{/t}
+					{else}{$igsnPublication.igsn_status}{/if}
+					({$igsnPublication.updated_at})
+					{if $igsnPublication.igsn_error != ""}
+					<br>{$igsnPublication.igsn_error}
+					{/if}
+				</div>
+				{if $rights.manage == 1 && $igsnPublication.batch_id != "" && $igsnPublication.igsn_status != "untracked"}
+				<div class="col-auto">
+					<form method="POST" action="sampleIgsnRefresh">
+						<input type="hidden" name="uid" value="{$data.uid}">
+						<input type="hidden" name="moduleFrom" value="sampleDisplay">
+						<button type="submit" class="btn btn-link p-0" title="{t}Relire le statut de la publication dans le registre IGSN{/t}">
+							<img src="display/images/refresh.png" height="15">
+							{t}Actualiser le statut IGSN{/t}
+						</button>
+						{$csrf}
+					</form>
+				</div>
+				{/if}
+			</div>
+		</div>
+	</div>
+	{/if}
 	<!-- boite d'onglets -->
 	<div class="row">
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
