@@ -1,0 +1,28 @@
+{
+  "id": "claude-code",
+  "version": "1.0.0",
+  "name": "Claude Code",
+  "installsAfter": ["ghcr.io/devcontainers/features/common-utils:1"],
+  "mounts": [
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.claude.json",
+      "target": "/home/vscode/.claude.json"
+    },
+    {
+      "type": "bind",
+      "source": "${localEnv:HOME}/.claude/projects",
+      "target": "/home/vscode/.claude/projects"
+    },
+    {
+      "type": "volume",
+      "source": "claude",
+      "target": "/home/vscode/.claude"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": ["Anthropic.claude-code"]
+    }
+  }
+}
