@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use App\Models\Collection as ModelsCollection;
+use App\Models\CollectionIgsn;
 use App\Models\Document;
 use App\Models\Event;
 use App\Models\Import;
@@ -67,6 +68,15 @@ class Collection extends PpciLibrary
         $this->vue->set($referent->getListe(2), "referents");
         $license = new License();
         $this->vue->set($license->getListe(2), "licenses");
+        /**
+         * Publication into the IGSN registry, without the API key
+         */
+        if ($this->appConfig->IGSN_enabled) {
+            $collectionIgsn = new CollectionIgsn;
+            $this->vue->set($collectionIgsn->getSettings($this->id), "igsnSettings");
+            $this->vue->set($collectionIgsn->getTemplates(), "igsnTemplates");
+            $this->vue->set(empty($this->appConfig->IGSN_webhookSecret) ? 1 : 0, "igsnWebhookMissing");
+        }
         $this->vue->help(_("parametres/les-collections.html"));
         return $this->vue->send();
     }
@@ -105,6 +115,43 @@ class Collection extends PpciLibrary
                 return false;
             }
         } catch (PpciException) {
+            return false;
+        }
+    }
+    /**
+     * Write the settings of the publication of the collection into the IGSN registry
+     *
+     * @return boolean
+     */
+    function igsnWrite(): bool
+    {
+        try {
+            if (empty($this->id) || empty($this->dataclass->lire($this->id, false))) {
+                throw new PpciException(_("La collection n'existe pas"));
+            }
+            $collectionIgsn = new CollectionIgsn;
+            if (!empty($_POST["igsn_disable"])) {
+                $collectionIgsn->remove($this->id);
+                $this->message->set(_("La publication dans IGSN est désactivée pour la collection"));
+            } else {
+                /**
+                 * Only a template of type igsn generates IGSN records
+                 */
+                $templateId = (int) ($_POST["igsn_dataset_template_id"] ?? 0);
+                if (!in_array($templateId, array_column($collectionIgsn->getTemplates(), "dataset_template_id"))) {
+                    throw new PpciException(_("Le modèle de jeu de données générant les fiches IGSN doit être choisi"));
+                }
+                $collectionIgsn->writeSettings($this->id, trim($_POST["igsn_api_key"] ?? ""), $templateId);
+                $this->message->set(_("Les paramètres de publication dans IGSN ont été enregistrés"));
+            }
+            $this->log->setLog($_SESSION["login"], "collectionIgsnWrite", $this->id);
+            return true;
+        } catch (PpciException $e) {
+            $this->message->set($e->getMessage(), true);
+            return false;
+        } catch (\Throwable $e) {
+            $this->message->setSyslog($e->getMessage(), true);
+            $this->message->set(_("Les paramètres de publication dans IGSN n'ont pas pu être enregistrés"), true);
             return false;
         }
     }

@@ -233,7 +233,8 @@
 			"samplesExit": "samplesexit",
 			"lotCreate": "lotCreate",
 			"samplesCreateComposite": "createComposite",
-			"samplesSetOperation": "samplesOperation"
+			"samplesSetOperation": "samplesOperation",
+			"samplesIgsnPublish": "igsnpublish"
 		};
 		for (const actiontitle in actions) {
 			var actionclass = "." + actions[actiontitle];
@@ -920,6 +921,9 @@
 						{t}Créer un échantillon composé à partir des échantillons sélectionnés{/t}
 					</option>
 					<option value="samplesSetOperation">{t}Affecter une opération{/t}</option>
+					{if $IGSN_enabled == 1}
+					<option value="samplesIgsnPublish">{t}Publier dans le registre IGSN{/t}</option>
+					{/if}
 					<option value="samplesSetTrashed">{t}Mettre ou sortir de la corbeille{/t}</option>
 					<option value="samplesDelete">{t}Supprimer les échantillons{/t}</option>
 					<option value="samplesDeleteWithChildren">
@@ -1157,6 +1161,17 @@
 						</div>
 					</div>
 				</div>
+				{if $IGSN_enabled == 1}
+				<!-- publication into the IGSN registry -->
+				<div class="igsnpublish">
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="igsnConfirmDuplicates" name="confirmDuplicates" value="1">
+						<label class="form-check-label" for="igsnConfirmDuplicates">
+							{t}Publier même si le registre soupçonne des doublons (même nom, même matériau, même collecteur){/t}
+						</label>
+					</div>
+				</div>
+				{/if}
 				<!-- exit a sample-->
 				<div class="samplesexit">
 					<div class="form-group">

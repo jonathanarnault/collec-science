@@ -75,6 +75,11 @@ class Database extends Config
     public function __construct()
     {
         parent::__construct();
+        /**
+         * The PostgreSQL driver sets the schema as search path when it opens the connection,
+         * so the search path does not depend on the startcall filter (excluded for the IGSN webhook)
+         */
+        $this->default["schema"] = $this->default["searchpath"];
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that

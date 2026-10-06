@@ -44,6 +44,11 @@ class Collection extends PpciController
     {
         return $this->lib->getAjax();
     }
+    function igsnWrite()
+    {
+        $this->lib->igsnWrite();
+        return empty($_POST["collection_id"]) ? $this->list() : $this->lib->change();
+    }
     function import() {
         $this->lib->import();
         return $this->list();

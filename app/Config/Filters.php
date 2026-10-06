@@ -9,6 +9,7 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 
+use App\Filters\IgsnConfigCheckFilter;
 use Ppci\Filters\AdminFilter;
 use Ppci\Filters\RightFilter;
 use Ppci\Filters\StartcallFilter;
@@ -36,7 +37,8 @@ class Filters extends BaseConfig
         'dbversioncheck' => DbversioncheckFilter::class,
         "admin"         => AdminFilter::class,
         "versioncheck"  => VersionCheckFilter::class,
-        "sessionHijacking" => SessionHijackingFilter::class
+        "sessionHijacking" => SessionHijackingFilter::class,
+        "igsnConfigCheck" => IgsnConfigCheckFilter::class
     ];
 
     /**
@@ -65,19 +67,21 @@ class Filters extends BaseConfig
                 'smallMovementChange',
                 'apiv1documentWrite',
                 'importTemplateGenerate',
-                'metadataExport'
+                'metadataExport',
+                'igsnWebhook'
             ]],
             'invalidchars',
             /*'legacyRoute',*/
-            'startcall',
-            'sessionHijacking',
+            'startcall' => ['except' => ['igsnWebhook']],
+            'sessionHijacking' => ['except' => ['igsnWebhook']],
             'dbversioncheck' => [
                 'except' => [
                     'CollectionsGenerateMail',
                     'apiv1sampleWrite',
                     'apiv1sampleDelete',
                     'apiv1movementWrite',
-                    'apiv1sampleList'
+                    'apiv1sampleList',
+                    'igsnWebhook'
                 ]
             ],
             'versioncheck' => ['except' => [
@@ -85,10 +89,12 @@ class Filters extends BaseConfig
                 'apiv1sampleWrite',
                 'apiv1sampleDelete',
                 'apiv1movementWrite',
-                'apiv1sampleList'
+                'apiv1sampleList',
+                'igsnWebhook'
             ]],
             'rights',
-            'admin'
+            'admin',
+            'igsnConfigCheck' => ['except' => ['igsnWebhook']]
         ],
         'after' => [
             'toolbar',

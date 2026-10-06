@@ -420,3 +420,13 @@ $routes->add('echantillon_en', '\Ppci\Controllers\Utils::submenu/echantillon_en'
 $routes->add('importExport_en', '\Ppci\Controllers\Utils::submenu/importExport_en');
 $routes->add('api_en', '\Ppci\Controllers\Utils::submenu/api_en');
 $routes->add('administration_en', '\Ppci\Controllers\Utils::submenu/administration_en');
+/**
+ * Publication of the samples into the IGSN registry: the routes exist only if enabled (app.IGSN_enabled)
+ */
+if (config("App")->IGSN_enabled) {
+    $routes->post('samplesIgsnPublish', 'Sample::igsnPublishMulti');
+    $routes->post('sampleIgsnPublish', 'Sample::igsnPublish');
+    $routes->post('sampleIgsnRefresh', 'Sample::igsnRefresh');
+    $routes->post('collectionIgsnWrite', 'Collection::igsnWrite');
+    $routes->post('igsnWebhook', 'IgsnWebhook::receive');
+}

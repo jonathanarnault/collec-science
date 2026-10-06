@@ -55,3 +55,12 @@ app.MAIL_param.from = collec@collec.local
 app.MAIL_param.mailDebug = 0
 
 app.checkRelease = 0
+
+#--------------------------------------------------------------------
+# IGSN registry (optional) - test server
+# The dev stack is served in http, so no webhook is requested:
+# use the "refresh" button of the sample to follow a publication
+#--------------------------------------------------------------------
+# app.IGSN_enabled = true
+# app.IGSN_url = https://igsn.jar.pm
+# app.IGSN_webhookSecret =

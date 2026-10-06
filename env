@@ -62,6 +62,16 @@ database.default.charset = utf8
 app.privateKey = ${BASE_DIR}/id_collec
 app.pubKey = ${BASE_DIR}/id_collec.pub
 #--------------------------------------------------------------------
+# IGSN registry (optional)
+#--------------------------------------------------------------------
+# Publication of the samples into the IGSN registry, disabled by default
+# app.IGSN_enabled = true
+# Address of the registry (default: https://igsn.cnrs.fr)
+# app.IGSN_url = https://igsn.cnrs.fr
+# Secret used to sign the webhook calls of the registry (generate it with: openssl rand -hex 32).
+# Without it, the publications are only followed by a manual refresh
+# app.IGSN_webhookSecret =
+#--------------------------------------------------------------------
 # Ppci identification
 #--------------------------------------------------------------------
 # Identification mode
